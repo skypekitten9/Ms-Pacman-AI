@@ -15,6 +15,7 @@ import pacman.controllers.Controller;
 import pacman.controllers.HumanController;
 import pacman.controllers.KeyBoardInput;
 import pacman.controllers.examples.AggressiveGhosts;
+import pacman.controllers.examples.DT_Controller;
 import pacman.controllers.examples.Legacy;
 import pacman.controllers.examples.Legacy2TheReckoning;
 import pacman.controllers.examples.NearestPillPacMan;
@@ -85,7 +86,8 @@ public class Executor
 		 */
 		
 		//run game for data collection
-		exec.runGameTimed(new DataCollectorController(new KeyBoardInput()),new StarterGhosts(),visual);
+		//exec.runGameTimed(new DataCollectorController(new KeyBoardInput()),new StarterGhosts(),visual);
+		exec.runGameTimed(new DT_Controller(),new StarterGhosts(),visual);
 	}
 	
     /**
