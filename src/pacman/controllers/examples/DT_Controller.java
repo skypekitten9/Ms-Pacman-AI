@@ -21,7 +21,7 @@ public class DT_Controller extends Controller<MOVE>
 	public DT_Controller()
 	{
 		data = DataSaverLoader.LoadPacManData();
-		//attributeList = LoadAttributes();
+		attributeList = LoadAttributes();
 		BuildTree(data, attributeList);
 		System.out.println("DT_CONTROLLER CONSTRUCTOR!!!!");
 	}
@@ -100,26 +100,79 @@ public class DT_Controller extends Controller<MOVE>
 		}
 		
 		//Step 4
-		AttributeSelection(tuples, attributes);
+		System.out.println(AttributeSelection(tuples, attributes));
 	}
 	
 	private Node.Attribute AttributeSelection(DataTuple[] tuples, List<Node.Attribute> attributes)
 	{
-		for(int i = 0; i<attributes.size(); i++)
+		Node.Attribute result = attributes.get(0);
+		float highestGain = InformationGain(tuples, attributes.get(0));
+		for(int i = 1; i<attributes.size(); i++)
 		{
+			if(InformationGain(tuples, attributes.get(i)) > highestGain)
+			{
+				highestGain = InformationGain(tuples, attributes.get(i));
+				result = attributes.get(i);
+			}
+		}
+		return result;
+	}
+	
+	private float InformationGain(DataTuple[] tuples, Node.Attribute attribute)
+	{
+		float gain = 0;
+		float entropyBefore = 0;
+		float entropyAfter = 0;
+		entropyBefore = Entropy(tuples);
+		
+		List<DataTuple[]> splitTuples = SplitTuples(tuples, attribute);
+		for(int i = 0; i < splitTuples.size(); i++)
+		{
+			entropyAfter += Entropy(splitTuples.get(i));
+		}
+		return gain;
+	}
+	
+	private float Entropy(DataTuple[] tuples)
+	{
+		return 1f;
+	}
+	
+	private List<DataTuple[]> SplitTuples(DataTuple[] tuples, Node.Attribute attribute)
+	{
+		List<DataTuple[]> result = new ArrayList<DataTuple[]>();
+		switch(attribute)
+		{
+		case blinkyDist:
+			break;
+			
+		case inkyDist:
+			break;
+			
+		case pinkyDist:
+			break;
+			
+		case sueDist:
+			break;
+			
+		case blinkyDir:
+			break;
+			
+		case inkyDir:
+			break;
+			
+		case pinkyDir:
+			break;
+			
+		case sueDir:
+			break;
+			
+		default:
+			System.out.println("ERROR: ATTRIBUTE NOT IN ENUM");
+			break;
 			
 		}
-		return Node.Attribute.pinkyDist;
-	}
-	
-	private void InformationGain()
-	{
-		
-	}
-	
-	private void Entropy()
-	{
-		
+		return result;
 	}
 	
 	private void TestTree()
