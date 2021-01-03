@@ -128,14 +128,58 @@ public class DT_Controller extends Controller<MOVE>
 		List<DataTuple[]> splitTuples = SplitTuples(tuples, attribute);
 		for(int i = 0; i < splitTuples.size(); i++)
 		{
-			entropyAfter += Entropy(splitTuples.get(i));
+			//entropyAfter += Entropy(splitTuples.get(i));
 		}
+		
+		//System.out.println("entropy after: " + entropyAfter);
 		return gain;
 	}
 	
 	private float Entropy(DataTuple[] tuples)
 	{
-		return 1f;
+		float right = 0, left = 0, up = 0, down = 0, neutral = 0;
+		
+		for(int i = 0; i < tuples.length; i++) 
+		{
+			switch(tuples[i].DirectionChosen) 
+			{
+			case LEFT:
+				left++;
+				break;
+				
+			case RIGHT:
+				right++;
+				break;
+				
+			case UP:
+				up++;
+				break;
+				
+			case DOWN:
+				down++;
+				break;
+				
+			case NEUTRAL:
+				neutral++;
+				break;
+			}			
+		}
+		
+		float entropy = -1 *((left / tuples.length)*Log2(left / tuples.length)) + 
+						 -1 *((right / tuples.length)*Log2(right / tuples.length)) + 
+						 -1 *((up / tuples.length)*Log2(up / tuples.length)) + 
+						 -1 *((down / tuples.length)*Log2(down / tuples.length)) +
+						 -1 *((neutral / tuples.length)*Log2(neutral / tuples.length));
+		
+		System.out.println("entropy: " + entropy);
+
+		return entropy;
+	}
+	
+	private float Log2(float x) 
+	{
+		if(x <= 0) return 0f;
+		return (float)(Math.log10(x) / Math.log10(2));
 	}
 	
 	private List<DataTuple[]> SplitTuples(DataTuple[] tuples, Node.Attribute attribute)
