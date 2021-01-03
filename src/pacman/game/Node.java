@@ -6,8 +6,6 @@ import dataRecording.DataTuple;
 import pacman.game.Constants.MOVE;
 public class Node {
 	public enum Attribute{
-		DirectionChosen,
-		pacmanPosition,
 		blinkyDist,
 		inkyDist,
 		pinkyDist,
@@ -26,6 +24,7 @@ public class Node {
 	{
 		
 	}
+	
 	public MOVE GetMove()
 	{
 		return move;
@@ -44,5 +43,41 @@ public class Node {
 	public void SetAttribute()
 	{
 		
+	}
+	
+	public static boolean AttributeCondition(Attribute attribute)
+	{
+		switch(attribute)
+		{
+		case blinkyDist:
+			break;
+			
+		case inkyDist:
+			break;
+			
+		case pinkyDist:
+			break;
+			
+		case sueDist:
+			break;
+			
+		case blinkyDir:
+			break;
+			
+		case inkyDir:
+			break;
+			
+		case pinkyDir:
+			break;
+			
+		case sueDir:
+			break;
+			
+		default:
+			System.out.println("ERROR: ATTRIBUTE NOT IN ENUM");
+			break;
+			
+		}
+		return true;
 	}
 }

@@ -99,6 +99,27 @@ public class DT_Controller extends Controller<MOVE>
 			return;
 		}
 		
+		//Step 4
+		AttributeSelection(tuples, attributes);
+	}
+	
+	private Node.Attribute AttributeSelection(DataTuple[] tuples, List<Node.Attribute> attributes)
+	{
+		for(int i = 0; i<attributes.size(); i++)
+		{
+			
+		}
+		return Node.Attribute.pinkyDist;
+	}
+	
+	private void InformationGain()
+	{
+		
+	}
+	
+	private void Entropy()
+	{
+		
 	}
 	
 	private void TestTree()
@@ -119,8 +140,6 @@ public class DT_Controller extends Controller<MOVE>
 	private List<Node.Attribute> LoadAttributes()
 	{
 		List<Node.Attribute> result = new ArrayList<Node.Attribute>();
-		result.add(Node.Attribute.DirectionChosen);
-		result.add(Node.Attribute.pacmanPosition);
 		result.add(Node.Attribute.blinkyDist);
 		result.add(Node.Attribute.inkyDist);
 		result.add(Node.Attribute.pinkyDist);
