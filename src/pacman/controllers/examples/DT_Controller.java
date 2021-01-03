@@ -128,10 +128,12 @@ public class DT_Controller extends Controller<MOVE>
 		List<DataTuple[]> splitTuples = SplitTuples(tuples, attribute);
 		for(int i = 0; i < splitTuples.size(); i++)
 		{
-			//entropyAfter += Entropy(splitTuples.get(i));
+			entropyAfter += Entropy(splitTuples.get(i));
 		}
-		
-		//System.out.println("entropy after: " + entropyAfter);
+		gain = entropyBefore - entropyAfter;
+		System.out.println("entropy before: " + entropyBefore);
+		System.out.println("entropy after: " + entropyAfter);
+		System.out.println("Gain: " + gain);
 		return gain;
 	}
 	
@@ -171,8 +173,7 @@ public class DT_Controller extends Controller<MOVE>
 						 -1 *((down / tuples.length)*Log2(down / tuples.length)) +
 						 -1 *((neutral / tuples.length)*Log2(neutral / tuples.length));
 		
-		System.out.println("entropy: " + entropy);
-
+		if(Float.isNaN(entropy)) return 0f;
 		return entropy;
 	}
 	
@@ -188,27 +189,227 @@ public class DT_Controller extends Controller<MOVE>
 		switch(attribute)
 		{
 		case blinkyDist:
+			List<DataTuple> close = new ArrayList<DataTuple>();
+			List<DataTuple> distant = new ArrayList<DataTuple>();
+			for(int i = 0; i < tuples.length; i++)
+			{
+				if(tuples[i].blinkyDist <= 20)
+				{
+					close.add(tuples[i]);
+				}
+				else
+				{
+					distant.add(tuples[i]);
+				}
+			}
+			result.add(ListToArray(close));
+			result.add(ListToArray(distant));
 			break;
 			
 		case inkyDist:
+			List<DataTuple> inkyClose = new ArrayList<DataTuple>();
+			List<DataTuple> inkyDistant = new ArrayList<DataTuple>();
+			for(int i = 0; i < tuples.length; i++)
+			{
+				if(tuples[i].inkyDist <= 20)
+				{
+					inkyClose.add(tuples[i]);
+				}
+				else
+				{
+					inkyDistant.add(tuples[i]);
+				}
+			}
+			result.add(ListToArray(inkyClose));
+			result.add(ListToArray(inkyDistant));
 			break;
 			
 		case pinkyDist:
+			List<DataTuple> pinkyClose = new ArrayList<DataTuple>();
+			List<DataTuple> pinkyDistant = new ArrayList<DataTuple>();
+			for(int i = 0; i < tuples.length; i++)
+			{
+				if(tuples[i].pinkyDist <= 20)
+				{
+					pinkyClose.add(tuples[i]);
+				}
+				else
+				{
+					pinkyDistant.add(tuples[i]);
+				}
+			}
+			result.add(ListToArray(pinkyClose));
+			result.add(ListToArray(pinkyDistant));
 			break;
 			
 		case sueDist:
+			List<DataTuple> sueClose = new ArrayList<DataTuple>();
+			List<DataTuple> sueDistant = new ArrayList<DataTuple>();
+			for(int i = 0; i < tuples.length; i++)
+			{
+				if(tuples[i].sueDist <= 20)
+				{
+					sueClose.add(tuples[i]);
+				}
+				else
+				{
+					sueDistant.add(tuples[i]);
+				}
+			}
+			result.add(ListToArray(sueClose));
+			result.add(ListToArray(sueDistant));
 			break;
 			
 		case blinkyDir:
+			List<DataTuple> left = new ArrayList<DataTuple>();
+			List<DataTuple> right = new ArrayList<DataTuple>();
+			List<DataTuple> up = new ArrayList<DataTuple>();
+			List<DataTuple> down = new ArrayList<DataTuple>();
+			List<DataTuple> neutral = new ArrayList<DataTuple>();
+			for(int i = 0; i < tuples.length; i++)
+			{
+				switch(tuples[i].blinkyDir) 
+				{
+				case LEFT:
+					left.add(tuples[i]);
+					break;
+				case RIGHT:
+					right.add(tuples[i]);
+					break;
+					
+				case UP:
+					up.add(tuples[i]);
+					break;
+					
+				case DOWN:
+					down.add(tuples[i]);
+					break;
+										
+				case NEUTRAL:
+					neutral.add(tuples[i]);
+					break;
+				}
+			}
+			
+			result.add(ListToArray(left));
+			result.add(ListToArray(right));
+			result.add(ListToArray(up));
+			result.add(ListToArray(down));
+			result.add(ListToArray(neutral));
 			break;
 			
 		case inkyDir:
+			List<DataTuple> inkyLeft = new ArrayList<DataTuple>();
+			List<DataTuple> inkyRight = new ArrayList<DataTuple>();
+			List<DataTuple> inkyUp = new ArrayList<DataTuple>();
+			List<DataTuple> inkyDown = new ArrayList<DataTuple>();
+			List<DataTuple> inkyNeutral = new ArrayList<DataTuple>();
+			for(int i = 0; i < tuples.length; i++)
+			{
+				switch(tuples[i].inkyDir) 
+				{
+				case LEFT:
+					inkyLeft.add(tuples[i]);
+					break;
+				case RIGHT:
+					inkyRight.add(tuples[i]);
+					break;
+					
+				case UP:
+					inkyUp.add(tuples[i]);
+					break;
+					
+				case DOWN:
+					inkyDown.add(tuples[i]);
+					break;
+										
+				case NEUTRAL:
+					inkyNeutral.add(tuples[i]);
+					break;
+				}
+			}
+			
+			result.add(ListToArray(inkyLeft));
+			result.add(ListToArray(inkyRight));
+			result.add(ListToArray(inkyUp));
+			result.add(ListToArray(inkyDown));
+			result.add(ListToArray(inkyNeutral));
 			break;
 			
 		case pinkyDir:
+			List<DataTuple> pinkyLeft = new ArrayList<DataTuple>();
+			List<DataTuple> pinkyRight = new ArrayList<DataTuple>();
+			List<DataTuple> pinkyUp = new ArrayList<DataTuple>();
+			List<DataTuple> pinkyDown = new ArrayList<DataTuple>();
+			List<DataTuple> pinkyNeutral = new ArrayList<DataTuple>();
+			for(int i = 0; i < tuples.length; i++)
+			{
+				switch(tuples[i].pinkyDir) 
+				{
+				case LEFT:
+					pinkyLeft.add(tuples[i]);
+					break;
+				case RIGHT:
+					pinkyRight.add(tuples[i]);
+					break;
+					
+				case UP:
+					pinkyUp.add(tuples[i]);
+					break;
+					
+				case DOWN:
+					pinkyDown.add(tuples[i]);
+					break;
+										
+				case NEUTRAL:
+					pinkyNeutral.add(tuples[i]);
+					break;
+				}
+			}
+			
+			result.add(ListToArray(pinkyLeft));
+			result.add(ListToArray(pinkyRight));
+			result.add(ListToArray(pinkyUp));
+			result.add(ListToArray(pinkyDown));
+			result.add(ListToArray(pinkyNeutral));
 			break;
 			
 		case sueDir:
+			List<DataTuple> sueLeft = new ArrayList<DataTuple>();
+			List<DataTuple> sueRight = new ArrayList<DataTuple>();
+			List<DataTuple> sueUp = new ArrayList<DataTuple>();
+			List<DataTuple> sueDown = new ArrayList<DataTuple>();
+			List<DataTuple> sueNeutral = new ArrayList<DataTuple>();
+			for(int i = 0; i < tuples.length; i++)
+			{
+				switch(tuples[i].sueDir) 
+				{
+				case LEFT:
+					sueLeft.add(tuples[i]);
+					break;
+				case RIGHT:
+					sueRight.add(tuples[i]);
+					break;
+					
+				case UP:
+					sueUp.add(tuples[i]);
+					break;
+					
+				case DOWN:
+					sueDown.add(tuples[i]);
+					break;
+										
+				case NEUTRAL:
+					sueNeutral.add(tuples[i]);
+					break;
+				}
+			}
+			
+			result.add(ListToArray(sueLeft));
+			result.add(ListToArray(sueRight));
+			result.add(ListToArray(sueUp));
+			result.add(ListToArray(sueDown));
+			result.add(ListToArray(sueNeutral));
 			break;
 			
 		default:
@@ -217,6 +418,16 @@ public class DT_Controller extends Controller<MOVE>
 			
 		}
 		return result;
+	}
+	
+	private DataTuple[] ListToArray(List<DataTuple> list)
+	{
+		DataTuple[] array = new DataTuple[list.size()];
+		for(int i = 0; i < list.size(); i++)
+		{
+			array[i] = list.get(i);
+		}
+		return array;
 	}
 	
 	private void TestTree()
