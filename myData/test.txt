@@ -1,0 +1,4 @@
+RIGHT;0;0;963;3;30;15;15;217;4;false;false;false;false;-1;-1;-1;-1;RIGHT;RIGHT;RIGHT;RIGHT;1293;220;4;
+RIGHT;0;0;963;3;30;15;15;217;4;false;false;false;false;-1;-1;-1;-1;RIGHT;RIGHT;RIGHT;RIGHT;1293;220;4;
+DOWN;0;0;963;3;30;15;15;217;4;false;false;false;false;-1;-1;-1;-1;RIGHT;RIGHT;RIGHT;LEFT;1293;220;4;
+DOWN;0;0;963;3;30;15;15;217;4;false;false;false;false;-1;-1;-1;-1;RIGHT;RIGHT;RIGHT;LEFT;1293;220;4;

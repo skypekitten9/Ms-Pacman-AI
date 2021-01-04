@@ -106,7 +106,7 @@ public class Executor
     	
     	Random rnd=new Random(0);
 		Game game;
-		
+	
 		for(int i=0;i<trials;i++)
 		{
 			game=new Game(rnd.nextLong());

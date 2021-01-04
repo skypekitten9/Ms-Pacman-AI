@@ -478,15 +478,11 @@ public class DT_Controller extends Controller<MOVE>
 	{
 		
 	}
-	
-	private MOVE ParseTree(Game game, long timeDue)
-	{
-		return 	MOVE.LEFT;
-	}
-	
 	public MOVE getMove(Game game, long timeDue)
 	{
-		return ParseTree(game, timeDue);
+		MOVE nextMove = root.Parse(game, timeDue);
+		System.out.println(nextMove);
+		return nextMove;
 	}
 	
 	private List<Node.Attribute> LoadAttributes()
