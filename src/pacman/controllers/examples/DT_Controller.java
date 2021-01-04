@@ -1,5 +1,6 @@
 package pacman.controllers.examples;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import dataRecording.DataSaverLoader;
@@ -15,16 +16,32 @@ import static pacman.game.Constants.*;
 
 public class DT_Controller extends Controller<MOVE> 
 {
-	DataTuple[] data;
-	List<Node.Attribute> attributeList = new ArrayList<Node.Attribute>();
+	
 	Node root;
 	public DT_Controller()
 	{
-		data = DataSaverLoader.LoadPacManData();
-		attributeList = LoadAttributes();
+		DataTuple[] data = DataSaverLoader.LoadPacManData();
+		DataTuple[] trainingData = Arrays.copyOfRange(data, 0, (data.length/10)*8);
+		DataTuple[] testData = Arrays.copyOfRange(data, (data.length/10)*8, data.length);
+		List<Node.Attribute> attributeList = LoadAttributes();
 		root = BuildTree(data, attributeList);
 		root.Print("", true);
-		System.out.println("DT_CONTROLLER CONSTRUCTOR!!!!");
+		PrintAccuracy(trainingData);
+	}
+	
+	private void PrintAccuracy(DataTuple[] data)
+	{
+		float correctAmount = 0;
+		for(int i = 0; i < data.length; i++)
+		{
+			MOVE correctAnswer = data[i].DirectionChosen;
+			if(root.Parse(data[i]) == correctAnswer)
+			{
+				correctAmount++;
+			}
+			//System.out.println(correctAnswer + " " + root.Parse(data[i]));
+		}
+		System.out.println("Accuracy: " + correctAmount/data.length + "%");
 	}
 	
 	
@@ -47,7 +64,7 @@ public class DT_Controller extends Controller<MOVE>
 		if(sameClass)
 		{
 			node.SetMove(tuples[0].DirectionChosen);
-			System.out.println("EQUAL TUPLES");
+			//System.out.println("EQUAL TUPLES");
 			return node;
 		}
 		
@@ -55,22 +72,22 @@ public class DT_Controller extends Controller<MOVE>
 		if(attributes.size() <= 0)
 		{
 			node.SetMove(GetMajorityClass(tuples));
-			System.out.println("NO ATTRIBUTES, RETURNING MAX");
+			//System.out.println("NO ATTRIBUTES, RETURNING MAX");
 			return node;
 		}
 		
 		//Step 4
 		//Step 4.A
 		Node.Attribute selectedAttribute = AttributeSelection(tuples, attributes);
-		System.out.println("ATTRIBUTE CHOSEN: " + selectedAttribute);
+		//System.out.println("ATTRIBUTE CHOSEN: " + selectedAttribute);
 		
 		//Step 4.B
 		node.SetAttribute(selectedAttribute);
-		for(int i = 0; i<attributeList.size();i++)
+		for(int i = 0; i<attributes.size();i++)
 		{
-			if(attributeList.get(i) == selectedAttribute)
+			if(attributes.get(i) == selectedAttribute)
 			{
-				attributeList.remove(i);
+				attributes.remove(i);
 				break;
 			}
 		}
@@ -88,12 +105,12 @@ public class DT_Controller extends Controller<MOVE>
 				Node childNode = new Node();
 				childNode.SetMove(GetMajorityClass(tuples));
 				node.AddChild(childNode);
-				System.out.println("EMPTY NODE");
+				//System.out.println("EMPTY NODE");
 			}
 			//Step 4.C.c
 			else
 			{
-				node.AddChild(BuildTree(splitTuples.get(i), attributeList));
+				node.AddChild(BuildTree(splitTuples.get(i), attributes));
 			}
 		}
 		return node;
@@ -175,9 +192,9 @@ public class DT_Controller extends Controller<MOVE>
 			entropyAfter += Entropy(splitTuples.get(i));
 		}
 		gain = entropyBefore - entropyAfter;
-		System.out.println("entropy before: " + entropyBefore);
-		System.out.println("entropy after: " + entropyAfter);
-		System.out.println("Gain: " + gain);
+		//System.out.println("entropy before: " + entropyBefore);
+		//System.out.println("entropy after: " + entropyAfter);
+		//System.out.println("Gain: " + gain);
 		return gain;
 	}
 	

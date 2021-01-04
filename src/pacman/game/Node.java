@@ -163,6 +163,142 @@ public class Node {
 		return move;
 	}
 	
+	public MOVE Parse(DataTuple data)
+	{
+		if(children.size() <= 0)
+		{
+			return move;
+		}
+		
+		switch(attribute)
+		{
+		case blinkyDist:
+			if(data.blinkyDist < 20)
+			{
+				return children.get(0).Parse(data);
+			}
+			else
+			{
+				return children.get(1).Parse(data);
+			}
+			
+		case inkyDist:
+			if(data.blinkyDist < 20)
+			{
+				return children.get(0).Parse(data);
+			}
+			else
+			{
+				return children.get(1).Parse(data);
+			}
+			
+		case pinkyDist:
+			if(data.pinkyDist < 20)
+			{
+				return children.get(0).Parse(data);
+			}
+			else
+			{
+				return children.get(1).Parse(data);
+			}
+			
+		case sueDist:
+			if(data.sueDist < 20)
+			{
+				return children.get(0).Parse(data);
+			}
+			else
+			{
+				return children.get(1).Parse(data);
+			}
+			
+		case blinkyDir:
+			switch(data.blinkyDir)
+			{
+			case LEFT:
+				return children.get(0).Parse(data);
+			
+			case RIGHT:
+				return children.get(1).Parse(data);
+				
+			case UP:
+				return children.get(2).Parse(data);
+				
+			case DOWN:
+				return children.get(3).Parse(data);
+				
+			case NEUTRAL:
+				return children.get(4).Parse(data);
+			}
+			break;
+			
+		case inkyDir:
+			switch(data.inkyDir)
+			{
+			case LEFT:
+				return children.get(0).Parse(data);
+			
+			case RIGHT:
+				return children.get(1).Parse(data);
+				
+			case UP:
+				return children.get(2).Parse(data);
+				
+			case DOWN:
+				return children.get(3).Parse(data);
+				
+			case NEUTRAL:
+				return children.get(4).Parse(data);
+			}
+			break;
+			
+		case pinkyDir:
+			switch(data.pinkyDir)
+			{
+			case LEFT:
+				return children.get(0).Parse(data);
+			
+			case RIGHT:
+				return children.get(1).Parse(data);
+				
+			case UP:
+				return children.get(2).Parse(data);
+				
+			case DOWN:
+				return children.get(3).Parse(data);
+				
+			case NEUTRAL:
+				return children.get(4).Parse(data);
+			}
+			break;
+			
+		case sueDir:
+			switch(data.sueDir)
+			{
+			case LEFT:
+				return children.get(0).Parse(data);
+			
+			case RIGHT:
+				return children.get(1).Parse(data);
+				
+			case UP:
+				return children.get(2).Parse(data);
+				
+			case DOWN:
+				return children.get(3).Parse(data);
+				
+			case NEUTRAL:
+				return children.get(4).Parse(data);
+			}
+			break;
+		default:
+			System.out.println("ERROR: ATTRIBUTE NOT IN ENUM");
+			break;
+			
+		}
+		return move;
+	}
+	
 	public void Print(String indent, boolean last)
 	{
 		System.out.print(indent);
