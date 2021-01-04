@@ -22,11 +22,13 @@ public class Node {
 	Attribute attribute;
 	MOVE move;
 	
+	//Constructor
 	public Node()
 	{
 		children = new ArrayList<Node>();
 	}
 	
+	//Parse the node with gamedata
 	public MOVE Parse(Game game, long timeDue)
 	{
 		if(children.size() <= 0)
@@ -163,6 +165,7 @@ public class Node {
 		return move;
 	}
 	
+	//Parse the node with recorded data
 	public MOVE Parse(DataTuple data)
 	{
 		if(children.size() <= 0)
@@ -299,6 +302,7 @@ public class Node {
 		return move;
 	}
 	
+	//Print node and children
 	public void Print(String indent, boolean last)
 	{
 		System.out.print(indent);

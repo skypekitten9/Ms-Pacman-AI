@@ -18,17 +18,25 @@ public class DT_Controller extends Controller<MOVE>
 {
 	
 	Node root;
+	//Constructor
 	public DT_Controller()
 	{
+		//Loads and splits data for training and testing
 		DataTuple[] data = DataSaverLoader.LoadPacManData();
 		DataTuple[] trainingData = Arrays.copyOfRange(data, 0, (data.length/10)*8);
 		DataTuple[] testData = Arrays.copyOfRange(data, (data.length/10)*8, data.length);
+		
+		//Builds and tests tree
 		List<Node.Attribute> attributeList = LoadAttributes();
+		System.out.println("Building tree...");
 		root = BuildTree(data, attributeList);
 		root.Print("", true);
 		PrintAccuracy(trainingData);
+		System.out.println("\nMoves played: ");
 	}
 	
+	
+	//Calculates and prints the accuracy of the tree (by useing training data
 	private void PrintAccuracy(DataTuple[] data)
 	{
 		float correctAmount = 0;
@@ -46,6 +54,7 @@ public class DT_Controller extends Controller<MOVE>
 	
 	
 	
+	//Builds tree according to steps from lecture 10
 	public Node BuildTree(DataTuple[] tuples, List<Node.Attribute> attributes)
 	{
 		//Steg 1
@@ -116,6 +125,7 @@ public class DT_Controller extends Controller<MOVE>
 		return node;
 	}
 	
+	//Get the MOVE answer (class) that has the majority in the datatuples
 	private MOVE GetMajorityClass(DataTuple[] tuples)
 	{
 		int upCount = 0;
@@ -163,7 +173,7 @@ public class DT_Controller extends Controller<MOVE>
 		}
 	}
 
-	
+	//Selects the attribute with the most information gain
 	private Node.Attribute AttributeSelection(DataTuple[] tuples, List<Node.Attribute> attributes)
 	{
 		Node.Attribute result = attributes.get(0);
@@ -179,6 +189,7 @@ public class DT_Controller extends Controller<MOVE>
 		return result;
 	}
 	
+	//Calculates information gain with entropy before and after
 	private float InformationGain(DataTuple[] tuples, Node.Attribute attribute)
 	{
 		float gain = 0;
@@ -198,6 +209,8 @@ public class DT_Controller extends Controller<MOVE>
 		return gain;
 	}
 	
+	
+	//Calculates entropy
 	private float Entropy(DataTuple[] tuples)
 	{
 		float right = 0, left = 0, up = 0, down = 0, neutral = 0;
@@ -238,12 +251,15 @@ public class DT_Controller extends Controller<MOVE>
 		return entropy;
 	}
 	
+	
+	//Log2 help function
 	private float Log2(float x) 
 	{
 		if(x <= 0) return 0f;
 		return (float)(Math.log10(x) / Math.log10(2));
 	}
 	
+	//Splits data tuples depending on a given attribute
 	private List<DataTuple[]> SplitTuples(DataTuple[] tuples, Node.Attribute attribute)
 	{
 		List<DataTuple[]> result = new ArrayList<DataTuple[]>();
@@ -481,6 +497,8 @@ public class DT_Controller extends Controller<MOVE>
 		return result;
 	}
 	
+	
+	//Transforms a DataTuple list to an array
 	private DataTuple[] ListToArray(List<DataTuple> list)
 	{
 		DataTuple[] array = new DataTuple[list.size()];
@@ -491,10 +509,7 @@ public class DT_Controller extends Controller<MOVE>
 		return array;
 	}
 	
-	private void TestTree()
-	{
-		
-	}
+	//Returns a move to the game
 	public MOVE getMove(Game game, long timeDue)
 	{
 		MOVE nextMove = root.Parse(game, timeDue);
@@ -502,6 +517,7 @@ public class DT_Controller extends Controller<MOVE>
 		return nextMove;
 	}
 	
+	//Load all desired attributes
 	private List<Node.Attribute> LoadAttributes()
 	{
 		List<Node.Attribute> result = new ArrayList<Node.Attribute>();
