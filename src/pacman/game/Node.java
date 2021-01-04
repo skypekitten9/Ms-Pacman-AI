@@ -16,18 +16,57 @@ public class Node {
 		sueDir
 	}
 	
-	boolean leaf = false;
+	List<Node> children;
 	Attribute attribute;
 	MOVE move;
 	
 	public Node()
 	{
+		children = new ArrayList<Node>();
+	}
+	
+	public MOVE Parse()
+	{
+		return move;
+	}
+	
+	public void Print(String indent, boolean last)
+	{
+		System.out.print(indent);
+		if(last)
+		{
+			System.out.print("\\-");
+	        indent += "  ";
+		}
+		else
+		{
+			System.out.print("|-");
+			indent += "| ";
+		}
+		
+		if(children.size() <= 0)
+		{
+			System.out.println(move);
+		}
+		else
+		{
+			System.out.println(attribute);
+		}
+		
+		for(int i = 0; i<children.size(); i++)
+		{
+			children.get(i).Print(indent, i == children.size() - 1);
+		}
 		
 	}
 	
 	public MOVE GetMove()
 	{
-		return move;
+		if(children.size() <= 0)
+		{
+			return move;
+		}
+		else return Parse();
 	}
 	
 	public void SetMove(MOVE moveToSet)
@@ -35,49 +74,13 @@ public class Node {
 		move = moveToSet;
 	}
 	
-	public void SetLeaf(boolean toSet)
+	public void SetAttribute(Attribute attributeToSet)
 	{
-		leaf = toSet;
+		attribute = attributeToSet;
 	}
 	
-	public void SetAttribute()
+	public void AddChild(Node child)
 	{
-		
-	}
-	
-	public static boolean AttributeCondition(Attribute attribute)
-	{
-		switch(attribute)
-		{
-		case blinkyDist:
-			break;
-			
-		case inkyDist:
-			break;
-			
-		case pinkyDist:
-			break;
-			
-		case sueDist:
-			break;
-			
-		case blinkyDir:
-			break;
-			
-		case inkyDir:
-			break;
-			
-		case pinkyDir:
-			break;
-			
-		case sueDir:
-			break;
-			
-		default:
-			System.out.println("ERROR: ATTRIBUTE NOT IN ENUM");
-			break;
-			
-		}
-		return true;
+		children.add(child);
 	}
 }

@@ -17,22 +17,22 @@ public class DT_Controller extends Controller<MOVE>
 {
 	DataTuple[] data;
 	List<Node.Attribute> attributeList = new ArrayList<Node.Attribute>();
-	List<Node> tree = new ArrayList<Node>();
+	Node root;
 	public DT_Controller()
 	{
 		data = DataSaverLoader.LoadPacManData();
 		attributeList = LoadAttributes();
-		BuildTree(data, attributeList);
+		root = BuildTree(data, attributeList);
+		root.Print("", true);
 		System.out.println("DT_CONTROLLER CONSTRUCTOR!!!!");
 	}
 	
 	
 	
-	public void BuildTree(DataTuple[] tuples, List<Node.Attribute> attributes)
+	public Node BuildTree(DataTuple[] tuples, List<Node.Attribute> attributes)
 	{
 		//Steg 1
 		Node node = new Node();
-		tree.add(node);
 		
 		//Steg 2
 		boolean sameClass = true;
@@ -47,61 +47,105 @@ public class DT_Controller extends Controller<MOVE>
 		if(sameClass)
 		{
 			node.SetMove(tuples[0].DirectionChosen);
-			node.SetLeaf(true);
 			System.out.println("EQUAL TUPLES");
-			return;
+			return node;
 		}
 		
 		//Steg 3
 		if(attributes.size() <= 0)
 		{
-			int upCount = 0;
-			int downCount = 0;
-			int leftCount = 0;
-			int rightCount = 0;
-			for(int i = 0; i < tuples.length; i++) 
-			{
-				if(tuples[i].DirectionChosen == MOVE.UP)
-				{
-					upCount++;
-				}
-				else if(tuples[i].DirectionChosen == MOVE.DOWN)
-				{
-					downCount++;
-				}
-				else if(tuples[i].DirectionChosen == MOVE.LEFT)
-				{
-					leftCount++;
-				}
-				else if(tuples[i].DirectionChosen == MOVE.RIGHT)
-				{
-					rightCount++;
-				}
-			}
-			if(upCount >= downCount && upCount >= leftCount && upCount >= rightCount)
-			{
-				node.SetMove(MOVE.UP);
-			}
-			else if(downCount >= upCount && downCount >= leftCount && downCount >= rightCount)
-			{
-				node.SetMove(MOVE.DOWN);
-			}
-			else if(leftCount >= upCount && leftCount >= downCount && leftCount >= rightCount)
-			{
-				node.SetMove(MOVE.LEFT);
-			}
-			else if(rightCount >= upCount && rightCount >= downCount && rightCount >= leftCount)
-			{
-				node.SetMove(MOVE.RIGHT);
-			}
-			node.SetLeaf(true);
+			node.SetMove(GetMajorityClass(tuples));
 			System.out.println("NO ATTRIBUTES, RETURNING MAX");
-			return;
+			return node;
 		}
 		
 		//Step 4
-		System.out.println(AttributeSelection(tuples, attributes));
+		//Step 4.A
+		Node.Attribute selectedAttribute = AttributeSelection(tuples, attributes);
+		System.out.println("ATTRIBUTE CHOSEN: " + selectedAttribute);
+		
+		//Step 4.B
+		node.SetAttribute(selectedAttribute);
+		for(int i = 0; i<attributeList.size();i++)
+		{
+			if(attributeList.get(i) == selectedAttribute)
+			{
+				attributeList.remove(i);
+				break;
+			}
+		}
+		
+		//Step 4.C
+		//Step 4.C.a
+		List<DataTuple[]> splitTuples = SplitTuples(tuples, selectedAttribute);
+		
+		//Step 4.C.b + 4.C.c
+		for(int i = 0; i<splitTuples.size();i++)
+		{
+			//Step 4.C.b
+			if(splitTuples.get(i).length <= 0)
+			{
+				Node childNode = new Node();
+				childNode.SetMove(GetMajorityClass(tuples));
+				node.AddChild(childNode);
+				System.out.println("EMPTY NODE");
+			}
+			//Step 4.C.c
+			else
+			{
+				node.AddChild(BuildTree(splitTuples.get(i), attributeList));
+			}
+		}
+		return node;
 	}
+	
+	private MOVE GetMajorityClass(DataTuple[] tuples)
+	{
+		int upCount = 0;
+		int downCount = 0;
+		int leftCount = 0;
+		int rightCount = 0;
+		for(int i = 0; i < tuples.length; i++) 
+		{
+			if(tuples[i].DirectionChosen == MOVE.UP)
+			{
+				upCount++;
+			}
+			else if(tuples[i].DirectionChosen == MOVE.DOWN)
+			{
+				downCount++;
+			}
+			else if(tuples[i].DirectionChosen == MOVE.LEFT)
+			{
+				leftCount++;
+			}
+			else if(tuples[i].DirectionChosen == MOVE.RIGHT)
+			{
+				rightCount++;
+			}
+		}
+		if(upCount >= downCount && upCount >= leftCount && upCount >= rightCount)
+		{
+			return MOVE.UP;
+		}
+		else if(downCount >= upCount && downCount >= leftCount && downCount >= rightCount)
+		{
+			return MOVE.DOWN;
+		}
+		else if(leftCount >= upCount && leftCount >= downCount && leftCount >= rightCount)
+		{
+			return MOVE.LEFT;
+		}
+		else if(rightCount >= upCount && rightCount >= downCount && rightCount >= leftCount)
+		{
+			return MOVE.RIGHT;
+		}
+		else 
+		{
+			return MOVE.NEUTRAL;
+		}
+	}
+
 	
 	private Node.Attribute AttributeSelection(DataTuple[] tuples, List<Node.Attribute> attributes)
 	{
@@ -437,7 +481,7 @@ public class DT_Controller extends Controller<MOVE>
 	
 	private MOVE ParseTree(Game game, long timeDue)
 	{
-		return tree.get(0).GetMove();
+		return 	MOVE.LEFT;
 	}
 	
 	public MOVE getMove(Game game, long timeDue)
